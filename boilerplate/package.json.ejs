@@ -43,12 +43,13 @@
     "@storybook/channels": "^3.2.16",
     "@storybook/react-native": "^3.2.16",
     "babel-core": "6.26.0",
+    "babel-eslint": "^8.2.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react-native": "^3.0.2",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
     "mockery": "^2.1.0",
-    "husky": "^0.14.3",
+    "husky": "^1.0.0-rc.1",
     "babel-plugin-ignite-ignore-reactotron": "^0.3.0",
     "react-dom": "16.0.0",
     "reactotron-react-native": "^1.13.2",
@@ -72,5 +73,33 @@
     ],
     "preset": "react-native"
   },
-  "config": {}
+  "config": {},
+  "standard": {
+    "env": [
+      "jest"
+    ],
+    "parser": "babel-eslint",
+    "globals": [
+      "describe",
+      "test",
+      "jest",
+      "jasmine",
+      "device",
+      "element",
+      "by",
+      "expect",
+      "fetch",
+      "navigator",
+      "__DEV__",
+      "XMLHttpRequest",
+      "FormData",
+      "React$Element"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run test",
+      "pre-push": "npm run lint && npm run test"
+    }
+  }
 }

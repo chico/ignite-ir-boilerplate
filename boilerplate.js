@@ -19,6 +19,22 @@ const isAndroidInstalled = function (context) {
 }
 
 /**
+ * Upgrade package
+ *
+ * @param {*} package - The package name.
+ * @param {*} version - The package version.
+ */
+async function upgradePackage (context, packageName, version, dev) {
+  const {print,
+    system
+  } = context
+  const saveDevFlag = (dev) ? ' --save-dev' : ''
+  const spinner = print.spin(`upgrade ${packageName} to ${version}`)
+  await system.spawn(`npm install ${packageName}@${version} ${saveDevFlag}`)
+  spinner.succeed(`upgraded ${packageName} to ${version}`)
+}
+
+/**
  * Let's install.
  *
  * @param {any} context - The gluegun context.
@@ -212,6 +228,10 @@ async function install (context) {
     throw e
   }
 
+  // Upgrade standard and babel-eslint
+  await upgradePackage(context, 'standard', '^11.0.0', true)
+  await upgradePackage(context, 'babel-eslint', '^8.2.2', true)
+
   // git configuration
   const gitExists = await filesystem.exists('./.git')
   if (!gitExists && !parameters.options['skip-git'] && system.which('git')) {
@@ -219,8 +239,8 @@ async function install (context) {
     const spinner = print.spin('configuring git')
 
     // TODO: Make husky hooks optional
-    const huskyCmd = '' // `&& node node_modules/husky/bin/install .`
-    system.run(`git init . && git add . && git commit -m "Initial commit." ${huskyCmd}`)
+    const huskyCmd = '&& yarn add husky@next --dev' // installs husky hooks
+    system.run(`git init . && git add . ${huskyCmd} && git commit -m "Initial commit." --no-verify`)
 
     spinner.succeed(`configured git`)
   }
