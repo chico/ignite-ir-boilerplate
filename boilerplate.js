@@ -71,7 +71,7 @@ async function install (context) {
   filesystem.remove('__tests__')
   filesystem.remove('App.js')
 
-  // copy our App, Tests & storybook directories
+  // copy our App, Tests, storybook & .circleci directories
   spinner.text = '▸ copying files'
   spinner.start()
   filesystem.copy(`${__dirname}/boilerplate/App`, `${process.cwd()}/App`, {
@@ -85,6 +85,10 @@ async function install (context) {
   filesystem.copy(`${__dirname}/boilerplate/storybook`, `${process.cwd()}/storybook`, {
     overwrite: true,
     matching: '!*.ejs'
+  })
+  filesystem.copy(`${__dirname}/boilerplate/.circleci`, `${process.cwd()}/.circleci`, {
+    overwrite: true,
+    matching: '*.yml'
   })
   spinner.stop()
 
